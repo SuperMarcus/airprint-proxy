@@ -1,6 +1,6 @@
 {
   "name": "airprint-proxy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AirPrint proxy for network printers located outside the network",
   "main": "src/index.js",
   "bin": "src/cli.js",
