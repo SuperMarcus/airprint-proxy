@@ -25,7 +25,7 @@
     "email": "other.marcus@icloud.com"
   },
   "scripts": {
-    "start": "node src/cli.js"
+    "test": "node src/test.js"
   },
   "directories": {
     "lib": "src"

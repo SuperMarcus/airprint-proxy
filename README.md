@@ -105,4 +105,4 @@ proxy.addPrinter(printer2);
 proxy.addPrinter(anotherPrinter);
 ```
 
-See `src/cli.js` for more examples.
+See `src/test.js` for more examples.
