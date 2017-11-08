@@ -27,22 +27,50 @@
 const uuidv5 = require("uuid/v5");
 const EventEmitter = require("events");
 const inherits = require("util").inherits;
+const utils = require("./utils");
 
 const defaultOptions = {
-    "Scan":     "F",
-    "Duplex":   "F",
-    "Color":    "T",
-    "UUID":     "",
-    "Fax":      "F",
-    "note":     "",
-    "priority": "20",
-    "URF":      "DM3",
-    "kind":     "document,envelope,photo",
-    "PaperMax": "<legal-A4",
-    "rp":       "ipp/print",
-    "pdl":      "image/jpeg,image/urf",
-    "qtotal":   "1",
-    "txtvers":  "1"
+    "air": "none",
+    "note": "",
+    "pdl": [ "image/jpeg", "image/urf" ],
+    "rp": "ipp/print",
+    "TLS": "",
+    "UUID": "",
+
+    //Deprecated Options
+    "adminurl": "",
+    "priority": 50,
+    "product": "()",
+    "qtotal": 1,
+    "txtvers": 1,
+    "ty": "",
+    "usb_CMD": "",
+    "usb_MDL": "",
+    "usb_MFG": "",
+
+    //AirPrint Specific Options
+    "URF": "DM3",
+
+    // 9.3 Printer Capability TXT Record Keys
+    "Transparent": "F",
+    "Binary": "F",
+    "TBCP": "F",
+    "kind": [ "document", "photo" ],
+
+    // 9.4 Printer Feature TXT Record Keys
+    "Color": "U",
+    "Duplex": "U",
+    "PaperMax": "legal-A4",
+    "Staple": "U",
+
+    //Deprecated features
+    "Bind": "U",
+    "Collate": "U",
+    "Copies": "U",
+    "PaperCustom": "U",
+    "Punch": "U",
+    "Scan": "F",
+    "Sort": "U"
 };
 
 function Printer(ip, name, port, notes, host) {
@@ -59,7 +87,7 @@ function Printer(ip, name, port, notes, host) {
         this.service = this.name + "._ipp._tcp.local";
         this.serviceIpps = this.name + "._ipps._tcp.local";
         this.port = port || 631;//Default CUPS port
-        this.presets = Object.assign({}, defaultOptions);
+        this.presets = utils.assign({}, defaultOptions);
         this.uuid = uuidv5(this.host, uuidv5.DNS);
         this.useIpps = false;
         this.options = {};
@@ -71,41 +99,69 @@ function Printer(ip, name, port, notes, host) {
 }
 
 Printer.prototype.setOption = function (key, value) {
-    this.options[key] = String(value);
-    this.emit("update", this, [ key ]);
+    if (typeof key === 'object' && key !== null){
+        utils.assign(this.options, key);
+        this.emit("update", this, Object.keys(key));
+    } else {
+        this.options[key] = value;
+        this.emit("update", this, [ key ]);
+    }
 };
 
-Printer.prototype.setColorPrinter = function (value) {
-    this.setOption("Color", (typeof value === 'undefined' ? true : value) ? "T" : "F")
+Printer.prototype.setOptionBool = function (key, value) {
+    this.setOption(key, value ? "T" : "F");
 };
 
-Printer.prototype.setNote = function (value) {
-    this.setOption("note", value);
+//See constants below to options
+Printer.prototype.setAuthentication = function (value) {
+    this.setOption("air", value);
 };
 
-Printer.prototype.setPriority = function (newPriority) {
-    this.setOption("priority", parseInt(newPriority) || 0);
+Printer.AIR_AUTH_NONE = "none";
+Printer.AIR_AUTH_CERTIFICATE = "certificate";
+Printer.AIR_AUTH_USER_PASS = "username,password";
+Printer.AIR_AUTH_NEGOTIATE = "negotiate";
+
+//See constants below to options
+Printer.prototype.setTLS = function (value) {
+    this.setOption("TLS", value);
 };
 
-Printer.prototype.setDuplex = function (supportDuplex) {
-    this.setOption("Duplex", (typeof value === 'undefined' ? true : value) ? "T" : "F")
-};
+Printer.AIR_TLS_DEFAULT = "";
+Printer.AIR_TLS_SUPPORTED = "1.2";
 
-Printer.prototype.setFax = function (supportFax) {
-    this.setOption("Fax", (typeof value === 'undefined' ? true : value) ? "T" : "F")
-};
-
-Printer.prototype.setScan = function (supportFax) {
-    this.setOption("Scan", (typeof value === 'undefined' ? true : value) ? "T" : "F")
+Printer.prototype.setQueue = function (queue) {
+    this.setOption("rp", queue);
 };
 
 Printer.prototype.setOptionPresets = function (options) {
     this.presets = options;
 };
 
+Printer.prototype.setPrinterModel = function (model) {
+    model = utils.opt(model, "");
+    this.setOption({
+        ty: model,
+        product: '(' + model + ')'
+    });
+};
+
+Printer.prototype.getSupportedMIME = function () {
+    return this.options["pdl"] || this.presets.pdl || [];
+};
+
+Printer.prototype.addSupportedMIME = function (mime) {
+    var supported = this.getSupportedMIME();
+    supported.push(mime);
+    this.setOption("pdl", supported);
+};
+
 Printer.prototype.compileRecordOptions = function () {
-    const recordOptions = Object.assign({}, this.presets, this.options);
-    const optionKeyPairs = Object.keys(recordOptions).map(function (k) { return k + "=" + recordOptions[k] });
+    const recordOptions = utils.assign({}, this.presets, this.options);
+    const optionKeyPairs = Object.keys(recordOptions).map(function (k) {
+        var value = recordOptions[k];
+        return k + "=" + (Array.isArray(value) ? value.join(',') : String(value));
+    });
     return Buffer.concat(optionKeyPairs.map(function (pair) {
         var buf = new Buffer(Buffer.byteLength(pair, 'utf8') + 1);
         buf.writeUInt8(Buffer.byteLength(pair, 'utf8'), 0);
