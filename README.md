@@ -65,10 +65,12 @@ sure to instantiate one every time.
 
 ```JavaScript
 //CommonJS style
-const PrinterProxy = require("airprint-proxy/PrinterProxy");
+const APProxy = require("airprint-proxy");
+const PrinterProxy = APProxy.PrinterProxy;
+const Printer = APProxy.Printer;
 
 //ES6 style
-import PrinterProxy from "airprint-proxy/PrinterProxy";
+import { PrinterProxy, Printer } from "airprint-proxy";
 
 let proxy = new PrinterProxy();
 ```
@@ -76,12 +78,6 @@ let proxy = new PrinterProxy();
 Use `Printer` to represent each printer.
 
 ```JavaScript
-//CommonJS style
-const Printer = require("airprint-proxy/Printer");
-
-//ES6 style
-import Printer from "airprint-proxy/Printer";
-
 let printer = new Printer(
     "10.35.0.18",            //IP Address
     "Library Color Printer", //Name
@@ -90,6 +86,7 @@ let printer = new Printer(
     "library-color.local"    //A proper hostname, make sure it is not duplicated
 );
 
+proxy.addPrinter(printer);
 ```
 
 See `src/cli.js` for more examples.
