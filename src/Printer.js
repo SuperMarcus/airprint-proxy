@@ -73,11 +73,24 @@ const defaultOptions = {
     "Sort": "U"
 };
 
+const notationMatcher = /^(?:(\w+):\/\/)?(\d+\.\d+\.\d+\.\d+)(?::(\d+)?)?(.+)?$/;
+
 function Printer(ip, name, port, notes, host) {
     if (this instanceof Printer){
         if (typeof ip !== 'string'){
             console.error("An ip address is necessary to create a proxy.");
             return;
+        }
+
+        var matchedResults = notationMatcher.exec(ip);
+        ip = matchedResults[2];
+
+        //for the (notation, name, notes) constructor
+        if (typeof port === 'string' &&
+            utils.isUndef(notes) &&
+            utils.isUndef(host)){
+            notes = port;
+            port = undefined;
         }
 
         this.ip = ip;
@@ -86,14 +99,15 @@ function Printer(ip, name, port, notes, host) {
         this.host = host || (this.name.toLowerCase().replace(/\s+/g, "-") + ".local");
         this.service = this.name + "._ipp._tcp.local";
         this.serviceIpps = this.name + "._ipps._tcp.local";
-        this.port = port || 631;//Default CUPS port
+        this.port = utils.opt(port, matchedResults[3]) || 631;//Default CUPS port
         this.presets = utils.assign({}, defaultOptions);
         this.uuid = uuidv5(this.host, uuidv5.DNS);
-        this.useIpps = false;
+        this.useIpps = matchedResults[1].toLowerCase() === "ipps";
         this.options = {};
 
-        this.setOption("note", notes || "");
         this.setOption("UUID", this.uuid);
+        this.setQueue(matchedResults[4]);
+        this.setNotes(notes);
 
     } else console.error("Printer is not a function, it's a class.");
 }
@@ -109,7 +123,7 @@ Printer.prototype.setOption = function (key, value) {
 };
 
 Printer.prototype.setOptionBool = function (key, value) {
-    this.setOption(key, value ? "T" : "F");
+    this.setOption(key, utils.isUndef(value) ? "U" : value ? "T" : "F");
 };
 
 //See constants below to options
@@ -133,6 +147,12 @@ Printer.AIR_TLS_SUPPORTED = "1.2";
 Printer.prototype.setQueue = function (queue) {
     this.setOption("rp", queue);
 };
+
+Printer.prototype.setNotes = function (value) {
+    this.setOption("note", utils.opt(value, ""));
+};
+
+Printer.prototype.setLocation = Printer.prototype.setNotes;
 
 Printer.prototype.setOptionPresets = function (options) {
     this.presets = options;

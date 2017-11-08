@@ -28,7 +28,12 @@ function opt(value, defaultValue) {
     return (typeof value === 'undefined') ? defaultValue : value;
 }
 
+function isUndef(value) {
+    return typeof value === 'undefined';
+}
+
 module.exports = {
     opt: opt,
+    isUndef: isUndef,
     assign: Object.assign
 };
