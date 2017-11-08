@@ -1,12 +1,20 @@
 {
   "name": "airprint-proxy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "AirPrint proxy for network printers located outside the network",
   "main": "src/index.js",
   "bin": "src/cli.js",
   "author": "Marcus Zhou <other.marcus@icloud.com> (https://marcuszhou.com/)",
   "license": "GPL-3.0",
-  "keywords": [ "airprint", "bonjour", "mdns", "zeroconf", "printer", "printers", "network" ],
+  "keywords": [
+    "airprint",
+    "bonjour",
+    "mdns",
+    "zeroconf",
+    "printer",
+    "printers",
+    "network"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/SuperMarcus/airprint-proxy.git"
