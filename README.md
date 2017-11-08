@@ -89,12 +89,19 @@ let printer = new Printer(
     "library-color.local"    //A proper hostname, make sure it is not duplicated <optional>
 );
 
+//Use URL to specify queue and include everything
+let printer2 = new Printer(
+    "ipp://10.20.0.95:631/ipp/print",
+     "US Life Center",
+     "Upper School 1st Floor");
+
 //Or you can just give the ip address, the name will be set to like
 // Untitled Bonjour Printer 10341
 let anotherPrinter = new Printer("10.20.0.92");
 
 //Add the printers to make proxy publish those printers
 proxy.addPrinter(printer);
+proxy.addPrinter(printer2);
 proxy.addPrinter(anotherPrinter);
 ```
 
