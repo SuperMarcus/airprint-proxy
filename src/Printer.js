@@ -102,7 +102,7 @@ function Printer(ip, name, port, notes, host) {
         this.port = utils.opt(port, matchedResults[3]) || 631;//Default CUPS port
         this.presets = utils.assign({}, defaultOptions);
         this.uuid = uuidv5(this.host, uuidv5.DNS);
-        this.useIpps = matchedResults[1].toLowerCase() === "ipps";
+        this.useIpps = utils.opt(matchedResults[1], "").toLowerCase() === "ipps";
         this.options = {};
 
         this.setOption("UUID", this.uuid);
@@ -194,3 +194,4 @@ inherits(Printer, EventEmitter);
 
 module.exports = Printer;
 module.exports.default = Printer;
+module.exports.defaultPreset = defaultOptions;

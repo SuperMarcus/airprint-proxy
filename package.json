@@ -6,6 +6,7 @@
   "bin": "src/cli.js",
   "author": "Marcus Zhou <other.marcus@icloud.com> (https://marcuszhou.com/)",
   "license": "GPL-3.0",
+  "types": "src/index.d.ts",
   "keywords": [
     "airprint",
     "bonjour",
