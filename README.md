@@ -80,15 +80,22 @@ let proxy = new PrinterProxy();
 Use `Printer` to represent each printer.
 
 ```JavaScript
+//This is the complex way
 let printer = new Printer(
-    "10.35.0.18",            //IP Address
-    "Library Color Printer", //Name
-    631,                     //Port
-    "Media Center",          //Notes, will be displayed as Location
-    "library-color.local"    //A proper hostname, make sure it is not duplicated
+    "10.35.0.18",            //IP Address <required>
+    "Library Color Printer", //Name <optional>
+    631,                     //Port <optional>
+    "Media Center",          //Notes, will be displayed as Location <optional>
+    "library-color.local"    //A proper hostname, make sure it is not duplicated <optional>
 );
 
+//Or you can just give the ip address, the name will be set to like
+// Untitled Bonjour Printer 10341
+let anotherPrinter = new Printer("10.20.0.92");
+
+//Add the printers to make proxy publish those printers
 proxy.addPrinter(printer);
+proxy.addPrinter(anotherPrinter);
 ```
 
 See `src/cli.js` for more examples.
