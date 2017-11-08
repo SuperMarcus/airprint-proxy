@@ -45,7 +45,7 @@ PrinterProxy.prototype.onServiceQuery = function (query) {
         if (t.type === "PTR") {
             if(t.name === that.serviceUniversalIpp || t.name === that.serviceIpp)
                 that.onPrinterListRequest(false);
-            if(t.name === that.serviceUniversalIpps || t.name === that.serviceIpps)
+            else if(t.name === that.serviceUniversalIpps || t.name === that.serviceIpps)
                 that.onPrinterListRequest(true);
         }
 
@@ -72,12 +72,45 @@ PrinterProxy.prototype.onServiceQuery = function (query) {
         if (t.type === "TXT") {
             const answers = [];
             that.printers.forEach(function (printer) {
-                answers.push({
-                    name: printer.service,
-                    type: "TXT",
-                    data: printer.compileRecordOptions()
-                });
-            })
+                if(t.name === printer.service){
+                    answers.push({
+                        name: printer.service,
+                        type: "TXT",
+                        data: printer.compileRecordOptions()
+                    });
+                    answers.push({
+                        name: printer.service,
+                        type: "PTR",
+                        ttl: 300,
+                        data: printer.host
+                    });
+                    answers.push({
+                        name: printer.host,
+                        type: "A",
+                        ttl: 300,
+                        data: printer.ip
+                    });
+                }else if(t.name === printer.serviceIpps){
+                    answers.push({
+                        name: printer.serviceIpps,
+                        type: "TXT",
+                        data: printer.compileRecordOptions()
+                    });
+                    answers.push({
+                        name: printer.serviceIpps,
+                        type: "PTR",
+                        ttl: 300,
+                        data: printer.host
+                    });
+                    answers.push({
+                        name: printer.host,
+                        type: "A",
+                        ttl: 300,
+                        data: printer.ip
+                    });
+                }
+            });
+            mdns.respond({ answers: answers });
         }
     })
 };
@@ -87,6 +120,8 @@ PrinterProxy.prototype.onPrinterListRequest = function (requestIpps, flush) {
     const flushCache = flush || false;
 
     this.printers.forEach(function (printer) {
+        if(requestIpps && !printer.useIpps) return;
+
         var answers = [];
 
         //txt record

@@ -22,6 +22,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+"use strict";
+
 const Printer = require("./Printer");
 const PrinterProxy = require("./PrinterProxy");
 
@@ -40,5 +42,21 @@ proxy.addPrinter(
 proxy.addPrinter(
     new Printer("10.20.0.92", "US Life Center", 631, "Upper School 1st Floor", "printer-lifecenter.local")
 );
+
+proxy.printers.forEach(function (t) {
+    t.setOption({
+        "Transparent": "T",
+        "Binary": "T",
+        "TBCP": "T",
+        "kind": [ "document", "photo", "envelope" ],
+
+        "Color": "T",
+        "Duplex": "T",
+        "PaperMax": ">isoC-A2",
+        "Staple": "T",
+
+        "product": "(RICOH MP C4503 PXL)"
+    });
+});
 
 console.info("[*] Advertising printers");
