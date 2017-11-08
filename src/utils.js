@@ -24,6 +24,8 @@
 
 "use strict";
 
+const util = require("util");
+
 function opt(value, defaultValue) {
     return (typeof value === 'undefined') ? defaultValue : value;
 }
@@ -35,5 +37,6 @@ function isUndef(value) {
 module.exports = {
     opt: opt,
     isUndef: isUndef,
-    assign: Object.assign
+    assign: Object.assign,
+    inherits: util.inherits
 };

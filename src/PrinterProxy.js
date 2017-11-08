@@ -25,6 +25,8 @@
 "use strict";
 
 const mdns = require("multicast-dns")();
+const EventEmitter = require("events");
+const utils = require("./utils");
 
 function PrinterProxy(){
     this.printers = [];
@@ -35,6 +37,8 @@ function PrinterProxy(){
     this.proxyService = "_services._dns-sd._udp.local";
     mdns.on("query", this.onServiceQuery.bind(this));
 }
+
+utils.inherits(PrinterProxy, EventEmitter);
 
 PrinterProxy.prototype.onServiceQuery = function (query) {
     const that = this;

@@ -26,7 +26,6 @@
 
 const uuidv5 = require("uuid/v5");
 const EventEmitter = require("events");
-const inherits = require("util").inherits;
 const utils = require("./utils");
 
 const defaultOptions = {
@@ -112,6 +111,8 @@ function Printer(ip, name, port, notes, host) {
     } else console.error("Printer is not a function, it's a class.");
 }
 
+utils.inherits(Printer, EventEmitter);
+
 Printer.prototype.setOption = function (key, value) {
     if (typeof key === 'object' && key !== null){
         utils.assign(this.options, key);
@@ -189,8 +190,6 @@ Printer.prototype.compileRecordOptions = function () {
         return buf;
     }));
 };
-
-inherits(Printer, EventEmitter);
 
 module.exports = Printer;
 module.exports.default = Printer;
