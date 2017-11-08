@@ -73,7 +73,7 @@ const defaultOptions = {
     "Sort": "U"
 };
 
-const notationMatcher = /^(?:(\w+):\/\/)?(\d+\.\d+\.\d+\.\d+)(?::(\d+)?)?(.+)?$/;
+const notationMatcher = /^(?:(\w+):\/\/)?(\d+\.\d+\.\d+\.\d+)(?::(\d+)?)?(?:\/(.+))?$/;
 
 function Printer(ip, name, port, notes, host) {
     if (this instanceof Printer){

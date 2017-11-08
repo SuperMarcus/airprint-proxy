@@ -76,6 +76,7 @@ PrinterProxy.prototype.onServiceQuery = function (query) {
                     answers.push({
                         name: printer.service,
                         type: "TXT",
+                        ttl: 300,
                         data: printer.compileRecordOptions()
                     });
                     answers.push({
@@ -94,6 +95,7 @@ PrinterProxy.prototype.onServiceQuery = function (query) {
                     answers.push({
                         name: printer.serviceIpps,
                         type: "TXT",
+                        ttl: 300,
                         data: printer.compileRecordOptions()
                     });
                     answers.push({

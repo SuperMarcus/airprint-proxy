@@ -32,30 +32,40 @@ console.info("[*] Setting up printers...");
 const proxy = new PrinterProxy();
 
 proxy.addPrinter(
-    new Printer("10.35.0.18", "Library Color", 631, "Media Center", "printer-librarycolor.local")
+    new Printer("ipp://10.35.0.18:631/ipp/print", "Library Color", "Media Center")
 );
 
 proxy.addPrinter(
-    new Printer("10.20.0.95", "US Commons", 631, "Upper School 2nd Floor", "printer-uscommons.local")
+    new Printer("ipp://10.20.0.95:631/ipp/print", "US Commons", "Upper School 2nd Floor")
 );
 
 proxy.addPrinter(
-    new Printer("10.20.0.92", "US Life Center", 631, "Upper School 1st Floor", "printer-lifecenter.local")
+    new Printer("ipp://10.20.0.92/ipp/print", "US Life Center", "Upper School 1st Floor")
 );
 
 proxy.printers.forEach(function (t) {
     t.setOption({
-        "Transparent": "T",
+        "Transparent": "F",
         "Binary": "T",
         "TBCP": "T",
-        "kind": [ "document", "photo", "envelope" ],
+        "kind": [ "document", "label", "envelope" ],
 
         "Color": "T",
+        "Collate": "T",
+        "Copies": "T",
+        "Sort": "T",
         "Duplex": "T",
-        "PaperMax": ">isoC-A2",
+        "PaperMax": "<legal-A4",
         "Staple": "T",
+        "Fax": "F",
+        "Scan": "T",
+        "Punch": 3,
+        "TLS": 1.2,
 
-        "product": "(RICOH MP C4503 PXL)"
+        "product": "(RICOH MP C4503 PXL)",
+        "pdl": "application/postscript,image/urf,application/pdf,image/jpeg",
+        "URF": "W8,SRGB24,CP255,DM1,FN3-4-5-9-20-22-24-25-26-28-29-30-74-75-76-78-79-80,"+
+               "MT1-2-3-4-5-6-11,PQ4,RS200-600,IS1-4-20-21-22-23,OB1-5-7,V1.4"
     });
 });
 
