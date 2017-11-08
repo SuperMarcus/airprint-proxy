@@ -6,9 +6,14 @@
   "bin": "src/cli.js",
   "author": "Marcus Zhou <other.marcus@icloud.com> (https://marcuszhou.com/)",
   "license": "GPL-3.0",
+  "keywords": [ "airprint", "bonjour", "mdns", "zeroconf", "printer", "printers", "network" ],
   "repository": {
     "type": "git",
     "url": "https://github.com/SuperMarcus/airprint-proxy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SuperMarcus/airprint-proxy/issues",
+    "email": "other.marcus@icloud.com"
   },
   "scripts": {
     "start": "node src/cli.js"
