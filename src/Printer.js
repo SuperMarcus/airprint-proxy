@@ -55,7 +55,7 @@ function Printer(ip, name, port, notes, host) {
         this.ip = ip;
         //If name is not set, just generate a random name instead
         this.name = name || "Untitled Bonjour Printer " + parseInt(Math.random() * 100000);
-        this.host = host || (name.toLowerCase().replace(/\s+/, "-") + ".local");
+        this.host = host || (this.name.toLowerCase().replace(/\s+/g, "-") + ".local");
         this.service = this.name + "._ipp._tcp.local";
         this.serviceIpps = this.name + "._ipps._tcp.local";
         this.port = port || 631;//Default CUPS port
@@ -64,7 +64,7 @@ function Printer(ip, name, port, notes, host) {
         this.useIpps = false;
         this.options = {};
 
-        this.setOption("note", notes);
+        this.setOption("note", notes || "");
         this.setOption("UUID", this.uuid);
 
     } else console.error("Printer is not a function, it's a class.");
