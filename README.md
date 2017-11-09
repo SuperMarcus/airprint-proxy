@@ -84,7 +84,7 @@ Usage: airprint-proxy [...options] <url|ip>
 Available options
 
 | Short | Full           | Description                                                               | Default Value              |
-| ----- | -------------- |:-------------------------------------------------------------------------:| -------------------------- |
+| ----- | -------------- | ------------------------------------------------------------------------- | -------------------------- |
 | `-p`  | `--port`       | The port of the printing server that clients will be connect to           | 631                        |
 | `-n`  | `--name`       | The name of the printer that will be broadcasts to the local network      | "Untitled Bonjour Printer" |
 | `-l`  | `--location`   | The notes which will be shown as the location of the printer              | ""                         |
