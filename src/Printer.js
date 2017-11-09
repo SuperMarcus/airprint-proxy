@@ -31,7 +31,7 @@ const utils = require("./utils");
 const defaultOptions = {
     "air": "none",
     "note": "",
-    "pdl": [ "image/jpeg", "image/urf" ],
+    "pdl": [ "image/urf" ],
     "rp": "ipp/print",
     "TLS": "",
     "UUID": "",
@@ -173,7 +173,8 @@ Printer.prototype.getSupportedMIME = function () {
 
 Printer.prototype.addSupportedMIME = function (mime) {
     var supported = this.getSupportedMIME();
-    supported.push(mime);
+    //Always add in front
+    supported.splice(0, 0, mime);
     this.setOption("pdl", supported);
 };
 
