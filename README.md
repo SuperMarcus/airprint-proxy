@@ -48,19 +48,54 @@ printing server to natively support the format.
 
 ## Setup
 
-Install as dependency using npm:
+Install as global package:
+```sh
+# For npm users
+npm install -g airprint-proxy
 
+# For yarn users
+yarn global add airprint-proxy
 ```
+
+Install as dependency:
+
+```sh
+# For npm users
 npm install airprint-proxy
-```
 
-Install as dependency using yarn
-
-```
+# For yarn users
 yarn add airprint-proxy
 ```
 
 ## Usage
+
+AirPrint Proxy comes with both Command Line Interface (CLI)
+and programmable APIs.
+
+### Commands
+
+Install AirPrint Proxy as global package to use the command.
+(See the section above)
+
+```
+Usage: airprint-proxy [...options] <url|ip>
+```
+
+Available options
+
+| Short | Full           | Description                                                               | Default Value              |
+| ----- | -------------- |:-------------------------------------------------------------------------:| -------------------------- |
+| `-p`  | `--port`       | The port of the printing server that clients will be connect to           | 631                        |
+| `-n`  | `--name`       | The name of the printer that will be broadcasts to the local network      | "Untitled Bonjour Printer" |
+| `-l`  | `--location`   | The notes which will be shown as the location of the printer              | ""                         |
+| `-q`  | `--queue`      | The queue on the printing server which clients will be communicating with | "ipp/print"                |
+| `-c`  | `--color`      | Broadcast this printer as a color printer                                 | false                      |
+| `-d`  | `--duplex`     | Broadcast this printer as duplex supported                                | false                      |
+| `-m`  | `--mime-types` | Specify additional supported MIME types beside 'image/urf'.               |                            |
+| `-o`  | `--txt-record` | Add additional txt records. (E.g. -o you=me)                              |                            |
+| `-h`  | `--help`       | Show help message                                                         |                            |
+
+### APIs
 
 The `PrinterProxy` object is setup to manage all mdns requests, so be
 sure to instantiate one every time.
