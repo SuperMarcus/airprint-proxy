@@ -95,6 +95,19 @@ Available options
 | `-o`  | `--txt-record` | Add additional txt records. (E.g. -o you=me)                              |                            |
 | `-h`  | `--help`       | Show help message                                                         |                            |
 
+Examples
+
+```sh
+# Broadcast a remote printer at 10.35.0.18
+airprint-proxy 10.35.0.18
+
+# Broadcast the same printer with name "Library Color"
+airprint-proxy --name "Library Color" 10.35.0.18
+
+# Broadcast the same printer with name "US Commons" and location "Upper School 1st Floor"
+airprint-proxy --name "Library Color" --location "Upper School 1st Floor" 10.35.0.18
+```
+
 ### APIs
 
 The `PrinterProxy` object is setup to manage all mdns requests, so be
