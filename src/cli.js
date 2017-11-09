@@ -133,6 +133,7 @@ console.info("[#] Printer setup information:");
 console.info("[#]  Address:\t%s", printer.ip);
 console.info("[#]  Port:\t%d", printer.port);
 console.info("[#]  Name:\t%s", printer.name);
+console.info("[#]  Notes:\t%s", argv.location);
 console.info("[#]  Service:\t%s", printer.host);
 console.info("[#]  Queue:\t%s", argv.queue);
 console.info("[#]  Additional Options:");
