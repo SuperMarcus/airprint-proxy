@@ -69,4 +69,9 @@ proxy.printers.forEach(function (t) {
     });
 });
 
+setInterval(function () {
+    //Readvertise every 2 seconds
+    proxy.onPrinterListRequest(false, false);
+}, 2000);
+
 console.info("[*] Advertising printers");
