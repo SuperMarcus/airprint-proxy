@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+- node
+- 6
+- 8
+sudo: false
+script:
+- npm run lint

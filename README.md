@@ -9,6 +9,7 @@ ____ _ ____ ___  ____ _ _  _ ___    ___  ____ ____ _  _ _   _
 
 [![Build Status](https://travis-ci.org/SuperMarcus/airprint-proxy.svg?branch=master)](https://travis-ci.org/SuperMarcus/airprint-proxy)
 [![npm version](https://badge.fury.io/js/airprint-proxy.svg)](https://badge.fury.io/js/airprint-proxy)
+
 [![NPM](https://nodei.co/npm/airprint-proxy.png)](https://nodei.co/npm/airprint-proxy/)
 
 Advertise AirPrint printers for network printers located outside the
