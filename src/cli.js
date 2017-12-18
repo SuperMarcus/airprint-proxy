@@ -37,26 +37,26 @@ const optParser = require("optimist")
         "\n" +
         "Usage: $0 [...options] <url|ip>"
     )
-    .options('h', {
+    .options("h", {
         alias: "help",
         describe: "Show this message"
     })
-    .options('p', {
+    .options("p", {
         alias: "port",
         default: 631,
         describe: "The port of the printing server that clients will be connect to"
     })
-    .options('n', {
+    .options("n", {
         alias: "name",
         default: "Untitled Bonjour Printer",
         describe: "The name of the printer that will be broadcasts to the local network"
     })
-    .options('l', {
+    .options("l", {
         alias: "location",
         default: "",
         describe: "The notes which will be shown as the location of the printer"
     })
-    .options('q', {
+    .options("q", {
         alias: "queue",
         default: "ipp/print",
         describe: "The queue on the printing server which clients will be communicating with"
@@ -91,7 +91,7 @@ if (argv.help) {
 
 var printerUrl = argv._[0];
 
-if(typeof printerUrl === 'undefined') {
+if(typeof printerUrl === "undefined") {
     console.error("Error: Please specify the url of this printer. (E.g. ipp://10.35.0.18:631/ipp/print)");
     console.error(" Run the program again with -h flag to receive more information.");
     process.exit(1);
@@ -115,11 +115,11 @@ if (argv.m){
 if (argv.o){
     if (Array.isArray(argv.o)){
         argv.o.forEach(function (option) {
-            var pair = option.split('=');
+            var pair = option.split("=");
             printer.setOption(pair[0], pair[1] || "");
-        })
-    }else if(typeof argv.o === 'string') {
-        var pair = argv.o.split('=');
+        });
+    }else if(typeof argv.o === "string") {
+        var pair = argv.o.split("=");
         printer.setOption(pair[0], pair[1] || "");
     }else {
         console.error("Unable to parse value: %s", argv.o);
@@ -142,10 +142,10 @@ Object.keys(printer.options).forEach(function (t) {
     //Skip printed options
     if (t !== "UUID" && t !== "note" && t !== "Duplex" && t !== "Color" && t !== "pdl" && t !== "rp")
         console.info("[#]   %s => %s", t, Array.isArray(printer.options[t]) ?
-            printer.options[t].join(',') : printer.options[t]);
+            printer.options[t].join(",") : printer.options[t]);
 });
 
-console.info("[#]  MIMEs:\t%s", printer.getSupportedMIME().join(','));
+console.info("[#]  MIMEs:\t%s", printer.getSupportedMIME().join(","));
 console.info("[#]  UUID:\t%s", printer.uuid);
 console.info("[*] Printer is broadcasting on the local network");
 console.info("[!] Hit Ctrl-C to exit the program");

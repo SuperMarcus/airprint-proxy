@@ -69,7 +69,7 @@ PrinterProxy.prototype.onServiceQuery = function (query) {
                         ]
                     });
                 }
-            })
+            });
         }
 
         //Txt
@@ -118,7 +118,7 @@ PrinterProxy.prototype.onServiceQuery = function (query) {
             });
             mdns.respond({ answers: answers });
         }
-    })
+    });
 };
 
 PrinterProxy.prototype.onPrinterListRequest = function (requestIpps, flush) {
@@ -149,14 +149,14 @@ PrinterProxy.prototype.onPrinterListRequest = function (requestIpps, flush) {
         //universal record, point ipp to service
         answers.push({
             name: requestIpps ? that.serviceUniversalIpps : that.serviceUniversalIpp,
-            type: 'PTR',
+            type: "PTR",
             ttl: 300,
             data: requestIpps ? printer.serviceIpps : printer.service
         });
         //ipp record, point ipp to service
         answers.push({
             name: requestIpps ? that.serviceIpps : that.serviceIpp,
-            type: 'PTR',
+            type: "PTR",
             ttl: 300,
             data: requestIpps ? printer.serviceIpps : printer.service
         });
@@ -171,7 +171,7 @@ PrinterProxy.prototype.onPrinterListRequest = function (requestIpps, flush) {
         //with subtype record
         answers.push({
             name: requestIpps ? printer.serviceIpps : printer.service,
-            type: 'SRV',
+            type: "SRV",
             flush: flushCache,
             ttl: 300,
             data: {
@@ -194,7 +194,7 @@ PrinterProxy.prototype.onPrinterListRequest = function (requestIpps, flush) {
  */
 PrinterProxy.prototype.addPrinter = function(printer){
     //Do not update again
-    if(this.printers.filter(function (t) { return t.uuid === printer.uuid }).length > 0){
+    if(this.printers.filter(function (t) { return t.uuid === printer.uuid; }).length > 0){
         return false;
     }
     //Handle updates and readvertise the printer
@@ -220,7 +220,7 @@ PrinterProxy.prototype.addPrinter = function(printer){
         this.onPrinterListRequest(true, true);
     };
 
-    printer.on('update', update.bind(this));
+    printer.on("update", update.bind(this));
     this.printers.push(printer);
     update.call(this);
 };

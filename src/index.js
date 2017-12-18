@@ -24,5 +24,5 @@
 
 module.exports = {
     Printer: require("./Printer"),
-    PrinterProxy: require("./PrinterProxy")
+    PrinterProxy: require("./PrinterProxy"),
 };

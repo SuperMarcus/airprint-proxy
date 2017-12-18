@@ -25,7 +25,8 @@
     "email": "other.marcus@icloud.com"
   },
   "scripts": {
-    "test": "node src/test.js"
+    "test": "node src/test.js",
+    "lint": "eslint src/*.js"
   },
   "directories": {
     "lib": "src"
@@ -34,5 +35,9 @@
     "multicast-dns": "^6.1.1",
     "optimist": "^0.6.1",
     "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.13.1",
+    "eslint-config-google": "^0.9.1"
   }
 }

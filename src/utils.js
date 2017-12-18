@@ -27,11 +27,11 @@
 const util = require("util");
 
 function opt(value, defaultValue) {
-    return (typeof value === 'undefined') ? defaultValue : value;
+    return (typeof value === "undefined") ? defaultValue : value;
 }
 
 function isUndef(value) {
-    return typeof value === 'undefined';
+    return typeof value === "undefined";
 }
 
 module.exports = {

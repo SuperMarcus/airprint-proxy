@@ -76,7 +76,7 @@ const notationMatcher = /^(?:(\w+):\/\/)?(\d+\.\d+\.\d+\.\d+)(?::(\d+)?)?(?:\/(.
 
 function Printer(ip, name, port, notes, host) {
     if (this instanceof Printer){
-        if (typeof ip !== 'string'){
+        if (typeof ip !== "string"){
             console.error("An ip address is necessary to create a proxy.");
             return;
         }
@@ -85,7 +85,7 @@ function Printer(ip, name, port, notes, host) {
         ip = matchedResults[2];
 
         //for the (notation, name, notes) constructor
-        if (typeof port === 'string' &&
+        if (typeof port === "string" &&
             utils.isUndef(notes) &&
             utils.isUndef(host)){
             notes = port;
@@ -114,7 +114,7 @@ function Printer(ip, name, port, notes, host) {
 utils.inherits(Printer, EventEmitter);
 
 Printer.prototype.setOption = function (key, value) {
-    if (typeof key === 'object' && key !== null){
+    if (typeof key === "object" && key !== null){
         utils.assign(this.options, key);
         this.emit("update", this, Object.keys(key));
     } else {
@@ -163,7 +163,7 @@ Printer.prototype.setPrinterModel = function (model) {
     model = utils.opt(model, "");
     this.setOption({
         ty: model,
-        product: '(' + model + ')'
+        product: "(" + model + ")"
     });
 };
 
@@ -182,11 +182,11 @@ Printer.prototype.compileRecordOptions = function () {
     const recordOptions = utils.assign({}, this.presets, this.options);
     const optionKeyPairs = Object.keys(recordOptions).map(function (k) {
         var value = recordOptions[k];
-        return k + "=" + (Array.isArray(value) ? value.join(',') : String(value));
+        return k + "=" + (Array.isArray(value) ? value.join(",") : String(value));
     });
     return Buffer.concat(optionKeyPairs.map(function (pair) {
-        var buf = new Buffer(Buffer.byteLength(pair, 'utf8') + 1);
-        buf.writeUInt8(Buffer.byteLength(pair, 'utf8'), 0);
+        var buf = new Buffer(Buffer.byteLength(pair, "utf8") + 1);
+        buf.writeUInt8(Buffer.byteLength(pair, "utf8"), 0);
         buf.write(pair, 1);
         return buf;
     }));
