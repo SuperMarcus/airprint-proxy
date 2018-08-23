@@ -27,6 +27,7 @@
 const mdns = require("multicast-dns")();
 const EventEmitter = require("events");
 const utils = require("./utils");
+const resolvePrinters = require("./resolve");
 
 function PrinterProxy(){
     this.printers = [];
@@ -189,6 +190,7 @@ PrinterProxy.prototype.onPrinterListRequest = function (requestIpps, flush) {
 };
 
 /**
+ * Broadcast this printer on the local network
  *
  * @param {Printer} printer
  */
@@ -223,6 +225,27 @@ PrinterProxy.prototype.addPrinter = function(printer){
     printer.on("update", update.bind(this));
     this.printers.push(printer);
     update.call(this);
+};
+
+/**
+ * Automatically resolves the name and capabilities from the printer
+ * if the printer does accept unicast mdns query from the address
+ * that airprint-proxy is running on.
+ *
+ * @param address IP address of the printer
+ * @param callback Callback function. See resolve.js.
+ *                 You don't need to add the printers in the callback
+ *                 function.
+ */
+PrinterProxy.prototype.resolvePrinter = function(address, callback){
+    resolvePrinters(address, function (error, printers) {
+        if(typeof callback !== "undefined") callback(error, printers);
+        if(error){
+            console.error("Error resolving printers from address", error);
+            return;
+        }
+        printers.forEach(this.addPrinter.bind(this));
+    }.bind(this));
 };
 
 module.exports = PrinterProxy;

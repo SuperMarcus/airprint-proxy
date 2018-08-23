@@ -75,6 +75,11 @@ const optParser = require("optimist")
         default: false,
         describe: "Broadcast this printer as duplex supported"
     })
+    .options("a", {
+        alias: "automatic",
+        default: false,
+        describe: "Automatically configure the"
+    })
     .options("o", {
         alias: "txt-record",
         describe: "Add additional txt records. (E.g. -o you=me)"

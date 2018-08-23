@@ -78,6 +78,9 @@ declare namespace AirPrintProxy {
             //Publish printer
             addPrinter(newPrinter: AirPrintProxy.Printer.Printer);
 
+            //Resolve and publish printer by ip address
+            resolvePrinter(address: string, callback);
+
             printers: Array<AirPrintProxy.Printer.Printer>;
         }
     }

@@ -7,6 +7,9 @@
   "author": "Marcus Zhou <other.marcus@icloud.com> (https://marcuszhou.com/)",
   "license": "GPL-3.0",
   "types": "src/index.d.ts",
+  "engines": {
+    "node": ">=8.3.0"
+  },
   "keywords": [
     "airprint",
     "bonjour",
@@ -32,6 +35,7 @@
     "lib": "src"
   },
   "dependencies": {
+    "dns-socket": "^4.1.1",
     "multicast-dns": "^6.1.1",
     "optimist": "^0.6.1",
     "uuid": "^3.1.0"

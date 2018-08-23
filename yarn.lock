@@ -203,6 +203,18 @@ dns-packet@^1.0.1:
     ip "^1.1.0"
     safe-buffer "^5.0.1"
 
+dns-packet@^5.0.1:
+  version "5.0.2"
+  resolved "http://registry.npm.taobao.org/dns-packet/download/dns-packet-5.0.2.tgz#ac43c388ffb576a790c6dd71a517a72e3f0620ad"
+  dependencies:
+    ip "^1.1.5"
+
+dns-socket@^4.1.1:
+  version "4.1.1"
+  resolved "http://registry.npm.taobao.org/dns-socket/download/dns-socket-4.1.1.tgz#aceacea5a08dc38ea8dec8269636ac8523ddde89"
+  dependencies:
+    dns-packet "^5.0.1"
+
 doctrine@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-2.0.2.tgz#68f96ce8efc56cc42651f1faadb4f175273b0075"
@@ -430,7 +442,7 @@ inquirer@^3.0.6:
     strip-ansi "^4.0.0"
     through "^2.3.6"
 
-ip@^1.1.0:
+ip@^1.1.0, ip@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.5.tgz#bdded70114290828c0a039e72ef25f5aaec4354a"
 
