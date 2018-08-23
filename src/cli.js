@@ -78,12 +78,34 @@ const optParser = require("optimist")
     .options("a", {
         alias: "automatic",
         default: false,
-        describe: "Automatically configure the"
+        describe: "Automatically configure the printer. Only specify an ip address if use this."
     })
     .options("o", {
         alias: "txt-record",
         describe: "Add additional txt records. (E.g. -o you=me)"
     });
+
+function dumpPrinter(printer) {
+    console.info("[#] Printer setup information:");
+    console.info("[#]  Address:\t%s", printer.ip);
+    console.info("[#]  Port:\t%d", printer.port);
+    console.info("[#]  Name:\t%s", printer.name);
+    console.info("[#]  Notes:\t%s", printer.options["note"]);
+    console.info("[#]  Service:\t%s", printer.host);
+    console.info("[#]  Queue:\t%s", printer.options["rp"]);
+    console.info("[#]  Additional Options:");
+
+    Object.keys(printer.options).forEach(function (t) {
+        //Skip printed options
+        if (t !== "UUID" && t !== "note" && t !== "Duplex" && t !== "Color" && t !== "pdl" && t !== "rp")
+            console.info("[#]   %s => %s", t, Array.isArray(printer.options[t]) ?
+                printer.options[t].join(",") : printer.options[t]);
+    });
+
+    console.info("[#]  MIMEs:\t%s", printer.getSupportedMIME().join(", "));
+    console.info("[#]  UUID:\t%s", printer.uuid);
+}
+
 const argv = optParser.argv;
 
 const Printer = ProxyLib.Printer;
@@ -96,61 +118,67 @@ if (argv.help) {
 
 var printerUrl = argv._[0];
 
-if(typeof printerUrl === "undefined") {
-    console.error("Error: Please specify the url of this printer. (E.g. ipp://10.35.0.18:631/ipp/print)");
-    console.error(" Run the program again with -h flag to receive more information.");
-    process.exit(1);
-}
-
 var proxy = new PrinterProxy();
 
-var printer = new Printer(printerUrl, argv.name, argv.port, argv.location);
-printer.setOption("Duplex", argv.duplex ? "T" : "F");
-printer.setOption("Color", argv.color ? "T" : "F");
-printer.setQueue(argv.queue);
+if(argv.a){
+    printerUrl = printerUrl || argv.a;
+    const ipPattern = /^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}$/g;
+    if(ipPattern.test(printerUrl)){
+        console.info("[*] Resolving printers on " + printerUrl);
+        proxy.resolvePrinter(printerUrl, function (err, printers) {
+            if(err){
+                console.error("Error: Unable to resolve remote printer - " + err);
+                console.error(" Does your printer allow unicast dns service discovery from your address?");
+                process.exit(1);
+            }
 
-if (argv.m){
-    if (Array.isArray(argv.m)){
-        argv.m.forEach(function (mime) {
-            printer.addSupportedMIME(mime);
-        });
-    }else printer.addSupportedMIME(argv.m);
-}
-
-if (argv.o){
-    if (Array.isArray(argv.o)){
-        argv.o.forEach(function (option) {
-            var pair = option.split("=");
-            printer.setOption(pair[0], pair[1] || "");
-        });
-    }else if(typeof argv.o === "string") {
-        var pair = argv.o.split("=");
-        printer.setOption(pair[0], pair[1] || "");
-    }else {
-        console.error("Unable to parse value: %s", argv.o);
+            console.info("[*] " + printers.length + " printers found on remote server " + printerUrl);
+            printers.forEach(dumpPrinter);
+            console.info("[*] Printers are broadcasting on the local network");
+        })
+    } else {
+        console.error("Error: Automatic mode only requires an IP address of the printer.");
+        console.error(" Please specify an valid ip address.");
         process.exit(1);
     }
+} else {
+    if(typeof printerUrl === "undefined") {
+        console.error("Error: Please specify the url of this printer. (E.g. ipp://10.35.0.18:631/ipp/print)");
+        console.error(" Run the program again with -h flag to receive more information.");
+        process.exit(1);
+    }
+
+    var printer = new Printer(printerUrl, argv.name, argv.port, argv.location);
+    printer.setOption("Duplex", argv.duplex ? "T" : "F");
+    printer.setOption("Color", argv.color ? "T" : "F");
+    printer.setQueue(argv.queue);
+
+    if (argv.m){
+        if (Array.isArray(argv.m)){
+            argv.m.forEach(function (mime) {
+                printer.addSupportedMIME(mime);
+            });
+        }else printer.addSupportedMIME(argv.m);
+    }
+
+    if (argv.o){
+        if (Array.isArray(argv.o)){
+            argv.o.forEach(function (option) {
+                var pair = option.split("=");
+                printer.setOption(pair[0], pair[1] || "");
+            });
+        }else if(typeof argv.o === "string") {
+            var pair = argv.o.split("=");
+            printer.setOption(pair[0], pair[1] || "");
+        }else {
+            console.error("Error: Unable to parse value: %s", argv.o);
+            process.exit(1);
+        }
+    }
+
+    proxy.addPrinter(printer);
+    dumpPrinter(printer);
+    console.info("[*] Printer is broadcasting on the local network");
 }
 
-proxy.addPrinter(printer);
-
-console.info("[#] Printer setup information:");
-console.info("[#]  Address:\t%s", printer.ip);
-console.info("[#]  Port:\t%d", printer.port);
-console.info("[#]  Name:\t%s", printer.name);
-console.info("[#]  Notes:\t%s", argv.location);
-console.info("[#]  Service:\t%s", printer.host);
-console.info("[#]  Queue:\t%s", argv.queue);
-console.info("[#]  Additional Options:");
-
-Object.keys(printer.options).forEach(function (t) {
-    //Skip printed options
-    if (t !== "UUID" && t !== "note" && t !== "Duplex" && t !== "Color" && t !== "pdl" && t !== "rp")
-        console.info("[#]   %s => %s", t, Array.isArray(printer.options[t]) ?
-            printer.options[t].join(",") : printer.options[t]);
-});
-
-console.info("[#]  MIMEs:\t%s", printer.getSupportedMIME().join(","));
-console.info("[#]  UUID:\t%s", printer.uuid);
-console.info("[*] Printer is broadcasting on the local network");
 console.info("[!] Hit Ctrl-C to exit the program");

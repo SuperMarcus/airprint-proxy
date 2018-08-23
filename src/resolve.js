@@ -64,6 +64,7 @@ function onLookup(addr, callback, err, res) {
                         let value = kv.slice(1).join("=");
 
                         if(key === "UUID") newPrinter.uuid = value;
+                        if(key === "pdl") value = value.split(",");
                         newPrinter.setOption(key, value);
                     }
                 }
