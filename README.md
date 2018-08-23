@@ -51,6 +51,12 @@ The library does not provide any kind of translation functions that
 converts the Apple Raster format to others, which requires the remote
 printing server to natively support the format.
 
+## Requirements & Compatibility
+
+`airprint-proxy` requires node version greater or equal 8.3.0 to run.
+
+`airprint-proxy` is compatible with node 10.
+
 ## Setup
 
 Install as global package:
@@ -99,11 +105,15 @@ Available options
 | `-m`  | `--mime-types` | Specify additional supported MIME types beside 'image/urf'.               |                            |
 | `-o`  | `--txt-record` | Add additional txt records. (E.g. -o you=me)                              |                            |
 | `-h`  | `--help`       | Show help message                                                         |                            |
+| `-a`  | `--automatic`  | Automatically resolve and configure printer from ip address               | false                      |
 
 Examples
 
 ```sh
-# Broadcast a remote printer at 10.35.0.18
+# Automatically resolve the printer's name and capabilities from its ip address
+airprint-proxy -a 10.35.0.18
+
+# Broadcast a remote printer at 10.35.0.18 (without asking the printer what it can do)
 airprint-proxy 10.35.0.18
 
 # Broadcast the same printer with name "Library Color"
@@ -156,6 +166,29 @@ let anotherPrinter = new Printer("10.20.0.92");
 proxy.addPrinter(printer);
 proxy.addPrinter(printer2);
 proxy.addPrinter(anotherPrinter);
+```
+
+As of `1.2.0`, you can let `PrinterProxy` automatically resolve the name and capabilities of the
+printer on a remote server supporting unicast dns service discovery. (e.g. a cups server)
+
+You may need to adjust your printer's firewall & mdns responder settings to allow dns sd queries
+from your address.
+
+```JavaScript
+//Resolve the printers broadcasting on 10.35.0.18
+proxy.resolvePrinter("10.35.0.18");
+
+//The optional callback function accepted in the second argument
+proxy.resolvePrinter("10.35.0.18", (error, resolvedPrinters) => {
+    //The 'error' parameter is null when successfully resolved the
+    // printer, and an 'Error' object on error
+    if(error){
+        console.error("Error resolving printer", error);
+    }
+    
+    //The 'resolvedPrinters' parameter is null when an error occurred.
+    // An array of 'Printer' object on success
+})
 ```
 
 See `src/test.js` for more examples.
