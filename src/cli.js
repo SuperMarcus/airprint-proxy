@@ -135,7 +135,7 @@ if(argv.a){
             console.info("[*] " + printers.length + " printers found on remote server " + printerUrl);
             printers.forEach(dumpPrinter);
             console.info("[*] Printers are broadcasting on the local network");
-        })
+        });
     } else {
         console.error("Error: Automatic mode only requires an IP address of the printer.");
         console.error(" Please specify an valid ip address.");

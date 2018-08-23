@@ -24,7 +24,6 @@
 
 "use strict";
 
-const Printer = require("./Printer");
 const PrinterProxy = require("./PrinterProxy");
 
 console.info("[*] Setting up printers...");

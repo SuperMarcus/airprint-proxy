@@ -41,7 +41,7 @@ function onLookup(addr, callback, err, res) {
     let hostname = null;
 
     for(let item of res.additionals){
-        if(item.data === addr) { hostname = item.name }
+        if(item.data === addr) { hostname = item.name; }
     }
 
     for(let printer of res.answers){
